@@ -6,13 +6,13 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def time_calculator():
     now = datetime.now()
-    now_str = now.strftime("%H:%M:%S")
+    now_str = now.strftime("%I:%M %p")
     future_time = None
     selected_minutes = None
 
     if request.method == 'POST':
         selected_minutes = int(request.form.get('minutes'))
-        future_time = (now + timedelta(minutes=selected_minutes)).strftime("%H:%M:%S")
+        future_time = (now + timedelta(minutes=selected_minutes)).strftime("%I:%M %p")
 
     options = ""
     for i in range(5, 61, 5):
@@ -32,33 +32,45 @@ def time_calculator():
                     background-color: #F0E491;
                     font-family: Arial;
                     padding: 20px;
+                    font-size: 30px;
                 }}
                 select {{
-                    padding: 5px;
-                    font-size: 16px;
-                    border-radius: 6px;
+                    padding: 12px;
+                    font-size: 20px;
+                    border-radius: px;
+                }}
+                
+                footer {{
+                    text-align: center;
+                    font-size: 9px;
                 }}
             </style>
         </head>
         <body>
-            <h2>Welcome to the Time Calculator Application</h2>
-            <p>Hope this will improve your performance!</p>
-            <hr>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <h2>Welcome to the Time Calculator Application</h2>
+                <p>Have a good shift, okay!</p>
+                <hr>
+                <div style="background: #BBC863; padding: 20px; border-radius: 12px;">
+                    <form method="POST">
+                        <p>Current Time: <b>{now_str}</b></p>
+                        <label for="minutes">Choose the <b><i>wait time</i></b>:</label><br>
+                        <select id="minutes" name="minutes" onchange="this.form.submit()">
+                            {options}
+                        </select>
+                    </form>
 
-            <form method="POST">
-                <p>Current Time: <b>{now_str}</b></p>
-                <label for="minutes">Choose the wait time:</label><br>
-                <select id="minutes" name="minutes" onchange="this.form.submit()">
-                    {options}
-                </select>
-            </form>
-
-            <p style="margin-top:20px;">
-                {f"Wait time gonna be: <b>{now_str} + {selected_minutes} minutes = {future_time}</b>" if future_time else "Please select a wait time above."}
-            </p>
+                    <p style="margin-top:20px;">
+                        {f"Wait time is <b>{future_time}</b>" if future_time else "Please select a wait time above."}
+                    </p>
+                </div>
+            </div>
         </body>
+            
+            
+        <footer> <br><p>Made by Ten <i>:P</i></p> </footer>
     </html>
     """
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
