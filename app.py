@@ -1,3 +1,4 @@
+import pytz
 from flask import Flask, request
 from datetime import datetime, timedelta
 
@@ -5,7 +6,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def time_calculator():
-    now = datetime.now()
+    ottawa_timezone = pytz.timezone('America/Toronto')
+    now = datetime.now(ottawa_timezone)
     now_str = now.strftime("%I:%M %p")
     future_time = None
     selected_minutes = None
