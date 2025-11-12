@@ -15,7 +15,7 @@ def time_calculator():
 
     if request.method == 'POST':
         selected_minutes = int(request.form.get('minutes'))
-        future_time = (now + timedelta(minutes=selected_minutes)).strftime("%I:%M:%S %p")
+        future_time = (now + timedelta(minutes=selected_minutes)).strftime("%I:%M %p")
 
     options = ""
     for i in range(5, 61, 5):
