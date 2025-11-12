@@ -8,13 +8,14 @@ app = Flask(__name__)
 def time_calculator():
     ottawa_timezone = pytz.timezone('America/Toronto')
     now = datetime.now(ottawa_timezone)
-    now_str = now.strftime("%I:%M %p")
+    now_str = now.strftime("%I:%M:%S %p")
+
     future_time = None
     selected_minutes = None
 
     if request.method == 'POST':
         selected_minutes = int(request.form.get('minutes'))
-        future_time = (now + timedelta(minutes=selected_minutes)).strftime("%I:%M %p")
+        future_time = (now + timedelta(minutes=selected_minutes)).strftime("%I:%M:%S %p")
 
     options = ""
     for i in range(5, 61, 5):
@@ -39,9 +40,8 @@ def time_calculator():
                 select {{
                     padding: 12px;
                     font-size: 20px;
-                    border-radius: px;
+                    border-radius: 6px;
                 }}
-                
                 footer {{
                     text-align: center;
                     font-size: 9px;
@@ -55,7 +55,7 @@ def time_calculator():
                 <hr>
                 <div style="background: #BBC863; padding: 20px; border-radius: 12px;">
                     <form method="POST">
-                        <p>Current Time: <b>{now_str}</b></p>
+                        <p>Current Time: <b id="current-time" style="font-size: 22px">{now_str}</b></p>
                         <label for="minutes">Choose the <b><i>wait time</i></b>:</label><br>
                         <select id="minutes" name="minutes" onchange="this.form.submit()">
                             {options}
@@ -67,10 +67,25 @@ def time_calculator():
                     </p>
                 </div>
             </div>
+
+            <footer><br><p>Made by Ten <i>:P</i></p></footer>
+
+            <script>
+                function updateTime() {{
+                    const now = new Date();
+                    const options = {{
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true
+                    }};
+                    document.getElementById('current-time').textContent = now.toLocaleTimeString('en-US', options);
+                    
+                }}
+                setInterval(updateTime, 1000); // Update every 1 second
+                updateTime(); 
+            </script>
         </body>
-            
-            
-        <footer> <br><p>Made by Ten <i>:P</i></p> </footer>
     </html>
     """
 
